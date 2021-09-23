@@ -93,7 +93,7 @@ const remove = (array, object) => {
     
 }
 
-const remove_ = () =>{
+const remove_ = (event) =>{
     const workselected = event.target;
     const workvalueselected = event.target.value || event.srcElement;
     const value_ = workvalueselected;

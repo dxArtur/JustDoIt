@@ -1,7 +1,7 @@
 let databasetomake =[
-    {'work': 'concluir este projeto'},
-    {'work': 'tocar violão'},
-    {'work': 'ler'},
+    {work: 'concluir este projeto'},
+    {work: 'tocar violão'},
+    {work: 'ler'},
 ];
 
 let databasemaking =[
@@ -9,10 +9,12 @@ let databasemaking =[
     {'work': 'é isso'},
 ];
 
-let databasefineshed = [
-
+let databasedone = [
+    {'work': 'oi'},
 ];
 
+
+// function for cleaning
 
 const cleanwork = () => {
     const tomake = document.getElementById('tomake');
@@ -23,17 +25,23 @@ const cleanwork = () => {
     while(making.lastChild.id != 'stop'){
         making.removeChild(making.lastChild);
     }
+    const done = document.getElementById('done');
+    while(done.lastChild.id !='stop'){
+        done.removeChild(done.lastChild);
+    }
 }
 
+// refresh the column
 
 const render = () => {
     cleanwork();
     databasetomake.forEach (item => tomakework(item.work));
     databasemaking.forEach (item => makingwork(item.work));
-    databasefineshed.forEach (item => creatework(item.work));
+    databasedone.forEach (item => donework(item.work));
 }
 
 
+// column tomake refresh and add work
 
 const tomakework = (work) => {
     const item = document.createElement('a');
@@ -42,15 +50,49 @@ const tomakework = (work) => {
     <button onclick="movemaking()" value="${work}" >${work}</button>
     `;
     document.getElementById('tomake').appendChild(item);
+    
 }
 
 const makingwork = (work) => {
     const item = document.createElement('a');
     item.classList.add('work');
     item.innerHTML = `
-    <button onclick="fineshed()" value="${work}">${work}</button>
+    <button onclick="movedone()" value="${work}">${work}</button>
     `;
     document.getElementById('making').appendChild(item);
+}
+
+const donework = (work) => {
+    const item = document.createElement('a');
+    item.classList.add('work');
+    item.innerHTML = `
+    <button onclick="remove()" value="${work}">${work}</button>
+    `;
+    document.getElementById('done').appendChild(item);
+}
+
+const print = () => {
+    for(var item in databasetomake){
+        console.log(databasetomake[item]);
+    }
+}
+
+//remove 
+const removetomake = (object) => {
+    for(var item in databasetomake)  {
+        if(databasetomake[item == object]){
+            delete databasetomake[item];
+            render();
+            print();
+        }
+    }
+}
+
+
+const addmaking = (object) => {
+    databasemaking.push({'work': object});
+    console.log(databasemaking);
+    render();
 }
 
 const movemaking = (work) => {
@@ -65,7 +107,37 @@ const movemaking = (work) => {
             console.log("value", value_);
             console.log("selected", workselected );
             console.log("passou aqui");
-            makingwork(value_);
+            addmaking(value_);
+            removetomake(value_);
+            
+             
+        });
+    });
+
+}
+
+
+
+const adddone = (object) =>{
+    databasedone.push({'work': object});
+    render();
+}
+
+
+const movedone = (work) =>{
+    console.log("iniciando função");
+    document.querySelectorAll(".work").forEach(function(buton){
+        buton.addEventListener("click", function(event){
+
+            const workselected = event.target;
+            const workvalueselected = event.target.value || event.srcElement;
+            const value_ = workvalueselected;
+            
+            console.log("value", value_);
+            console.log("selected", workselected );
+            console.log("passou aqui");
+            adddone(value_);
+            
 
             if(workselected.parentNode){
                 workselected.parentNode.removeChild(workselected);
@@ -74,6 +146,12 @@ const movemaking = (work) => {
         });
     });
 
+}
+
+const test = (databasetomake) =>{
+    for (var property in databasetomake){
+        console.log(property + " = " + obj[property]);
+      }
 }
 
 
@@ -87,6 +165,14 @@ const insertwork = (evento) => {
     }
 }
 
+/*
+const insertwork = (evento) =>{
+    const text = evento.target.value;
+    databasetomake.push({'work': });
+    render();
+    
+}
+*/
 
 document.getElementById('newwork').addEventListener('keypress', insertwork);
 

@@ -2,6 +2,7 @@ let databasetomake =[
     {work: 'concluir este projeto'},
     {work: 'tocar violão'},
     {work: 'ler'},
+    {work: 'comprar fogos p impeachment de bolsonaro'},
 ];
 
 let databasemaking =[
@@ -66,7 +67,7 @@ const donework = (work) => {
     const item = document.createElement('a');
     item.classList.add('work');
     item.innerHTML = `
-    <button onclick="remove()" value="${work}">${work}</button>
+    <button onclick="remove_()" value="${work}">${work}</button>
     `;
     document.getElementById('done').appendChild(item);
 }
@@ -77,22 +78,31 @@ const print = () => {
     }
 }
 
+
+
+
+
 //remove 
-const removetomake = (object) => {
-    for(var item in databasetomake)  {
-        if(databasetomake[item == object]){
-            delete databasetomake[item];
-            render();
-            print();
-        }
-    }
+const remove = (array, object) => {
+    console.log(object);
+    console.log("iniciando função remove");
+    
+    array.splice(array.indexOf(object), 1);
+    render();
+
+    
 }
 
+const remove_ = () =>{
+    const workselected = event.target;
+    const workvalueselected = event.target.value || event.srcElement;
+    const value_ = workvalueselected;
+    remove(databasedone, value_);
+}
 
-const addmaking = (object) => {
-    databasemaking.push({'work': object});
-    console.log(databasemaking);
-    render();
+const addmaking = (array, object) => {
+    array.push({'work': object});
+    remove(databasetomake, object);
 }
 
 const movemaking = (work) => {
@@ -107,8 +117,8 @@ const movemaking = (work) => {
             console.log("value", value_);
             console.log("selected", workselected );
             console.log("passou aqui");
-            addmaking(value_);
-            removetomake(value_);
+            addmaking(databasemaking, value_);
+            
             
              
         });
@@ -118,9 +128,9 @@ const movemaking = (work) => {
 
 
 
-const adddone = (object) =>{
-    databasedone.push({'work': object});
-    render();
+const adddone = (array, object) =>{
+    array.push({'work': object});
+    remove(databasemaking, object);
 }
 
 
@@ -136,23 +146,15 @@ const movedone = (work) =>{
             console.log("value", value_);
             console.log("selected", workselected );
             console.log("passou aqui");
-            adddone(value_);
+            adddone(databasedone, value_);
             
-
-            if(workselected.parentNode){
-                workselected.parentNode.removeChild(workselected);
-            }
+        
             
         });
     });
 
 }
 
-const test = (databasetomake) =>{
-    for (var property in databasetomake){
-        console.log(property + " = " + obj[property]);
-      }
-}
 
 
 const insertwork = (evento) => {
@@ -165,14 +167,16 @@ const insertwork = (evento) => {
     }
 }
 
-/*
-const insertwork = (evento) =>{
-    const text = evento.target.value;
-    databasetomake.push({'work': });
+
+const insertwork_ = (evento) => {
+    const inpt = document.querySelector('#newwork');
+    const text =inpt.value;
+    databasetomake.push({'work': text});
     render();
-    
+    inpt.value='';
 }
-*/
+
+
 
 document.getElementById('newwork').addEventListener('keypress', insertwork);
 
